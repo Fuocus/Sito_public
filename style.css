@@ -146,6 +146,12 @@ body {
   font-family: var(--display-font);
 }
 
+.countdown-card__caption {
+  font-size: 1.1rem;
+  color: var(--ink-700);
+  margin-bottom: clamp(1.2rem, 3vw, 1.8rem);
+}
+
 .countdown {
   display: flex;
   gap: clamp(0.4rem, 1.8vw, 0.8rem);
@@ -247,6 +253,11 @@ body {
   .countdown-card__title {
     font-size: clamp(1.35rem, 6vw, 1.85rem);
     margin-bottom: clamp(1rem, 4.8vw, 1.4rem);
+  }
+
+  .countdown-card__caption {
+    font-size: clamp(1.2rem, 5.4vw, 1.6rem);
+    margin-bottom: clamp(1rem, 4.6vw, 1.5rem);
   }
 
   .countdown {
