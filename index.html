@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fuocus</title>
+  <link rel="icon" type="image/png" href="iconcina.png">
   <style>
     @font-face {
       font-family: "DM Sans";
@@ -115,6 +116,28 @@
       gap: 14px;
       margin-bottom: 26px;
     }
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(255, 212, 0, 0.9);
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(26, 0, 92, 0.18);
+      box-shadow: 0 12px 28px rgba(26, 0, 92, 0.18);
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+    .social-link:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(125, 28, 46, 0.22); }
     .button {
       background: var(--accent);
       color: #ffd400;
@@ -238,6 +261,25 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .contact-links a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(26, 0, 92, 0.4);
+      text-decoration-thickness: 1.5px;
+    }
+    .contact-separator {
+      opacity: 0.6;
+      color: var(--muted);
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -285,14 +327,14 @@
       padding: 28px;
       background: transparent;
       color: #ffffff;
-      box-shadow: 0 20px 50px rgba(125, 28, 46, 0.28);
+      box-shadow: none;
     }
     .cta-banner::after {
       content: "";
       position: absolute;
       inset: -10% -10% -10% -10%;
-      background: url("pattern%20mano/Impronta-03.jpg") center/cover no-repeat;
-      opacity: 1;
+      background: url("pattern%20multimano/pattern%20lilla%20mani.png") center/cover no-repeat;
+      opacity: 0.92;
       z-index: 0;
     }
     .cta-content { position: relative; z-index: 1; }
@@ -302,7 +344,7 @@
       font-size: 26px;
     }
     .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
-    .cta-actions .button { box-shadow: 0 14px 30px rgba(253, 73, 52, 0.25); }
+    .cta-actions .button { box-shadow: 0 6px 14px rgba(26, 0, 92, 0.18); }
     .cta-actions .ghost { color: #ffd400; border-color: rgba(255, 212, 0, 0.7); }
     .countdown {
       display: inline-flex;
@@ -510,7 +552,7 @@
           </div>
         </div>
         <div class="people">
-          <a class="person" href="#contatti">
+          <div class="person">
             <img src="immagini/isacco.png" alt="Isacco" style="object-position: top;">
             <div class="meta">
               <div class="name">Isacco</div>
@@ -518,22 +560,28 @@
             </div>
             <p>Isacco Gavazzi (classe 1997), matematico, ex innovation manager di un broker assicurativo, appassionato un po di tutto, oltre a Fuocus fa del cucito e cucina in delle associazioni. 
             </p>
-          </a>
-          <a class="person" href="#contatti">
+            <div class="contact-links">
+              <a href="https://www.linkedin.com/in/whatisacco/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+          <div class="person">
             <img src="immagini/martino.jpeg" alt="Martino" style="object-position: center;">
             <div class="meta">
               <div class="name">Martino</div>
-              <div class="role">Membro Fondatorer</div>
+              <div class="role">Membro Fondatore</div>
             </div>
             <p>Martino Guggiari (classe 1999), ha fatto il product manager, ha provato a fare una startup nella sylver economy, ama la falegnameria e passa sempre più tempo negli arci di Milano</p>
-          </a>
-          <a class="person" href="#contatti">
+            <div class="contact-links">
+              <a href="https://www.linkedin.com/in/martinoguggiari/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+          <div class="person">
             <img src="immagini/isacco e martino.png" alt="Isacco e Martino" style="object-position: center;">
             <div class="meta">
               <div class="name">Isacco e Martino</div>
               <div class="role">Ci diamo forza a vicenda</div>
             </div>
-          </a>
+          </div>
         </div>
 
       </div>
@@ -542,6 +590,10 @@
     
     <footer>
       Fuocus &mdash; la rivoluzione dell'attenzione.
+      <div class="social-links" aria-label="Canali social di Fuocus">
+        <a class="social-link" href="https://www.linkedin.com/company/fuocus/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="social-link" href="https://www.instagram.com/fuocus_it/" target="_blank" rel="noopener">Instagram</a>
+      </div>
     </footer>
   </div>
   <script>
