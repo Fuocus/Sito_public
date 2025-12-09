@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fuocus</title>
+  <style>
+    @font-face {
+      font-family: "DM Sans";
+      src: url("font/DM_Sans/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "MuseoModerno";
+      src: url("font/MuseoModerno/MuseoModerno-VariableFont_wght.ttf") format("truetype");
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    :root {
+      --bg: rgba(255, 212, 0, 0.12); /* giallo */
+      --accent: #1a005c; /* blu fuocus */
+      --accent-soft: #8c7dde; /* lilla */
+      --accent-hot: #fd4934; /* arancio fuocus */
+      --deep: #7d1c2e; /* bordeaux */
+      --ink: #1a005c;
+      --muted: rgba(26, 0, 92, 0.7);
+      --card: rgba(140, 125, 222, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "DM Sans", system-ui, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+    header { margin-bottom: 64px; }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand img {
+      height: 100px;
+      width: auto;
+      display: block;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(26, 0, 92, 0.1);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    h1 {
+      font-family: "MuseoModerno", "DM Sans", sans-serif;
+      font-size: clamp(36px, 5vw, 54px);
+      line-height: 1.05;
+      margin: 16px 0 14px;
+      color: var(--accent);
+    }
+    .lede {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 620px;
+      margin-bottom: 22px;
+    }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .button {
+      background: var(--accent);
+      color: #ffd400;
+      padding: 14px 22px;
+      border-radius: 14px;
+      font-weight: 700;
+      box-shadow: 0 12px 28px rgba(26, 0, 92, 0.24);
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+    .button:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(125, 28, 46, 0.28); }
+    .ghost {
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(26, 0, 92, 0.22);
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(255, 212, 0, 0.16);
+      backdrop-filter: blur(4px);
+    }
+    .hero-visual {
+      position: relative;
+      isolate: isolate;
+    }
+    .pattern-splash {
+      position: absolute;
+      inset: -10% -6% 18% -12%;
+      background: url("pattern%20multimano/Pattern%20-%20con%20sfondo-03.jpg") center/cover no-repeat;
+      filter: saturate(1.08);
+      opacity: 0.36;
+      border-radius: 34px;
+      z-index: -1;
+      box-shadow: 0 18px 50px rgba(26, 0, 92, 0.24);
+    }
+    .hero-visual img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 18px 38px rgba(26, 0, 92, 0.26);
+      object-fit: cover;
+      min-height: 300px;
+    }
+    .logos {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .logos img {
+      height: 42px;
+      width: auto;
+      object-fit: contain;
+    }
+    .section {
+      margin: 72px 0;
+    }
+    .section h2 {
+      font-family: "MuseoModerno", "DM Sans", sans-serif;
+      font-size: clamp(28px, 3vw, 38px);
+      margin: 0 0 10px;
+      color: var(--accent);
+    }
+    .section p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 720px;
+    }
+    .panel-violet {
+      background: rgba(140, 125, 222, 0.16);
+      border: 1px solid rgba(26, 0, 92, 0.16);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 12px 30px rgba(26, 0, 92, 0.14);
+    }
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .pill {
+      padding: 8px 14px;
+      background: rgba(140, 125, 222, 0.16);
+      border-radius: 999px;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 13px;
+    }
+    .people {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+    .person {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--card);
+      box-shadow: 0 14px 32px rgba(140, 125, 222, 0.16);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .person:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(125, 28, 46, 0.18); }
+    .person img {
+      width: 100%;
+      height: 240px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: rgba(140, 125, 222, 0.3);
+    }
+    .person .meta { display: flex; align-items: center; justify-content: space-between; }
+    .person .name {
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--ink);
+    }
+    .person .role {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .card {
+      padding: 16px;
+      background: var(--card);
+      border: 1px solid rgba(26, 0, 92, 0.12);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(26, 0, 92, 0.12);
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .partners {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .partners img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      padding: 10px 12px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 24px rgba(253, 73, 52, 0.16);
+    }
+    .cta-banner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      padding: 28px;
+      background: transparent;
+      color: #ffffff;
+      box-shadow: 0 20px 50px rgba(125, 28, 46, 0.28);
+    }
+    .cta-banner::after {
+      content: "";
+      position: absolute;
+      inset: -10% -10% -10% -10%;
+      background: url("pattern%20mano/Impronta-03.jpg") center/cover no-repeat;
+      opacity: 1;
+      z-index: 0;
+    }
+    .cta-content { position: relative; z-index: 1; }
+    .cta-content h3 {
+      margin: 0 0 10px;
+      font-family: "MuseoModerno", "DM Sans", sans-serif;
+      font-size: 26px;
+    }
+    .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    .cta-actions .button { box-shadow: 0 14px 30px rgba(253, 73, 52, 0.25); }
+    .cta-actions .ghost { color: #ffd400; border-color: rgba(255, 212, 0, 0.7); }
+    .countdown {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(140, 125, 222, 0.2);
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .countdown .segments {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      font-family: "DM Sans", "MuseoModerno", monospace;
+    }
+    .countdown .segment {
+      display: grid;
+      grid-auto-flow: row;
+      align-items: center;
+      justify-items: center;
+      background: rgba(26, 0, 92, 0.08);
+      padding: 8px 10px;
+      border-radius: 10px;
+      min-width: 62px;
+    }
+    .countdown .num {
+      font-size: 20px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+    .countdown .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .countdown .note {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    footer {
+      margin-top: 48px;
+      color: rgba(26, 0, 92, 0.6);
+      font-size: 14px;
+      text-align: center;
+    }
+    .supporters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .supporter-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(140, 125, 222, 0.2);
+      border: 1px solid rgba(26, 0, 92, 0.18);
+      box-shadow: 0 10px 24px rgba(26, 0, 92, 0.14);
+    }
+    .supporter-card strong {
+      color: var(--accent);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: block;
+    }
+    .supporter-card .supporter-note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .supporter-card img {
+      height: 72px;
+      width: auto;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .page { padding: 24px 18px 64px; }
+      .hero { gap: 22px; }
+      .person img { height: 200px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <nav>
+        <div class="brand">
+          <img src="Logo%20fuocus%20blu%20-%20RGB.png" alt="Fuocus">
+        </div>
+        <div class="nav-links">
+          <a href="#chi-siamo">Chi siamo</a>
+          <a href="#contatti">Contatti</a>
+        </div>
+      </nav>
+      <div class="hero">
+        <div>
+          <h1>La rivoluzione dell'attenzione</h1>
+          <p class="lede">Conoscenza, supporto e empowerment di 
+            organizzazioni che generano valore per la società</p>
+          <div class="cta">
+            <a class="button" href="#contatti">Parliamone</a>
+            <a class="ghost" href="#chi-siamo">Conosci il team</a>
+          </div>
+          <div class="countdown" id="countdown">
+            <div class="segments">
+              <div class="segment">
+                <div class="num" data-unit="days">00</div>
+                <div class="label">Giorni</div>
+              </div>
+              <div class="segment">
+                <div class="num" data-unit="hours">00</div>
+                <div class="label">Ore</div>
+              </div>
+              <div class="segment">
+                <div class="num" data-unit="minutes">00</div>
+                <div class="label">Min</div>
+              </div>
+              <div class="segment">
+                <div class="num" data-unit="seconds">00</div>
+                <div class="label">Sec</div>
+              </div>
+            </div>
+            <div class="note">al lancio della piattaforma</div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="pattern-splash"></div>
+          <img src="immagini gloria/3.jpg" alt="Visivo del progetto">
+        </div>
+      </div>
+    </header>
+
+
+    <section class="section" id="missione">
+      <h2>Missione e visione</h2>
+      <p>Fuocus vuole potenziare organizzazioni che generano valore per la società mettendole in contatto con i giovani più motivati e attenti. Gratuitamente, per tutti. <br>
+        Dalle associazioni di quartiere a un'azienda che investe in rinnovabili, quello che ci interessa è il tuo impatto, sulla comunità, la città, l'italia, il pianeta.
+        <br>
+
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3>Organizzazioni e progetti</h3>
+          <p>Facciamo scoprire organizzazioni, progetti in cui il successo è di tutti.</p>
+        </div>
+        <div class="card">
+          <h3>Lavoro</h3>
+          <p>Diamo la possibilità di cercare posizioni di lavoro mettendo al centro l'impatto sul mondo e non solo il job title.</p>
+        </div>
+        <div class="card">
+          <h3>Ispiriamo il cambiamento</h3>
+          <p>Realizziamo podcast per raccontare le storie delle organizzazioni che ci piacciono e facciamo corsi per aiutare altri a cambiare il mondo per il meglio</p>
+        </div>
+      </div>
+    </section>
+    <section id="contatti" class="section">
+      <div class="cta-banner">
+        <div class="cta-content">
+          <h3>Raccontaci a cosa dai attenzione</h3>
+          <p style="max-width: 620px; margin: 0; color: #ffffff;">Stiamo cercando organizzazioni che si battono per qualcosa che conta davvero. Parlaci del tuo contributo e proviamo a crescere assieme.</p>
+          <div class="cta-actions">
+            <a class="button" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0LUzBNAYDaBHtM6-wJOAW2VT4YLs9S_1CBDPI8OY7zZT3i1Tei1dMWL9LcNcJRXcNPVSbeEJwj" target="_blank" rel="noopener">Prenota una chiamata</a>
+            <a class="ghost" href="mailto:isacco.gavazzi@fondazionepoetica.it">Scrivi a noi</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+ 
+
+    <section id="chi-siamo" class="section">
+      <div class="panel-violet">
+        <h2>Chi siamo</h2>
+        <div class="supporters">
+          <div class="supporter-card">
+            <div>
+              <strong>A partire da</strong>
+              <div class="supporter-note">Fondazione Poetica</div>
+            </div>
+            <img src="immagini/poetica.png" alt="Fondazione Poetica">
+          </div>
+          <div class="supporter-card">
+            <div>
+              <strong>Finanziatore</strong>
+              <div class="supporter-note">Fondazione Cariplo</div>
+            </div>
+            <img src="immagini/cariplo.png" alt="Fondazione Cariplo">
+          </div>
+        </div>
+        <div class="people">
+          <a class="person" href="#contatti">
+            <img src="immagini/isacco.png" alt="Isacco" style="object-position: top;">
+            <div class="meta">
+              <div class="name">Isacco</div>
+              <div class="role">Membro Fondatore</div>
+            </div>
+            <p>Isacco Gavazzi (classe 1997), matematico, ex innovation manager di un broker assicurativo, appassionato un po di tutto, oltre a Fuocus fa del cucito e cucina in delle associazioni. 
+            </p>
+          </a>
+          <a class="person" href="#contatti">
+            <img src="immagini/martino.jpeg" alt="Martino" style="object-position: center;">
+            <div class="meta">
+              <div class="name">Martino</div>
+              <div class="role">Membro Fondatorer</div>
+            </div>
+            <p>Martino Guggiari (classe 1999), ha fatto il product manager, ha provato a fare una startup nella sylver economy, ama la falegnameria e passa sempre più tempo negli arci di Milano</p>
+          </a>
+          <a class="person" href="#contatti">
+            <img src="immagini/isacco e martino.png" alt="Isacco e Martino" style="object-position: center;">
+            <div class="meta">
+              <div class="name">Isacco e Martino</div>
+              <div class="role">Ci diamo forza a vicenda</div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    
+    <footer>
+      Fuocus &mdash; la rivoluzione dell'attenzione.
+    </footer>
+  </div>
+  <script>
+    (function() {
+      const el = document.getElementById("countdown");
+      if (!el) return;
+      const targetDate = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const target = new Date(year, 0, 15, 0, 0, 0); // 15 gennaio
+        return target.getTime() <= now.getTime()
+          ? new Date(year + 1, 0, 15, 0, 0, 0).getTime()
+          : target.getTime();
+      };
+      let target = targetDate();
+      const segments = {
+        days: el.querySelector('[data-unit="days"]'),
+        hours: el.querySelector('[data-unit="hours"]'),
+        minutes: el.querySelector('[data-unit="minutes"]'),
+        seconds: el.querySelector('[data-unit="seconds"]'),
+      };
+      const pad = (n) => String(n).padStart(2, "0");
+      const tick = () => {
+        const now = Date.now();
+        const diff = target - now;
+        if (diff <= 0) {
+          el.textContent = "Siamo live!";
+          return;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        el.textContent = `${days}g ${hours}h al lancio della piattaforma`;
+        requestAnimationFrame(() => setTimeout(tick, 1000));
+      };
+      tick();
+    })();
+  </script>
+</body>
+</html>
