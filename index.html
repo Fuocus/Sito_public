@@ -436,6 +436,11 @@
       padding: 8px 10px;
       border-radius: 10px;
     }
+    @media (min-width: 980px) {
+      .people {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
     @media (max-width: 640px) {
       .nav-links { display: none; }
       .page { padding: 24px 18px 64px; }
@@ -505,7 +510,7 @@
       <div class="grid">
         <div class="card">
           <h3>Organizzazioni e progetti</h3>
-          <p>Facciamo scoprire organizzazioni e progetti in cui il successo è di tutti.</p>
+          <p>Facciamo scoprire organizzazioni e progetti in cui il successo è un successo per tutta la società</p>
         </div>
         <div class="card">
           <h3>Lavoro</h3>
