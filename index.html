@@ -655,7 +655,7 @@
       const targetDate = () => {
         const now = new Date();
         const year = now.getFullYear();
-        const target = new Date(year, 0, 15, 0, 0, 0); // 15 gennaio
+        const target = new Date(year, 1, 15, 0, 0, 0); // 15 gennaio
         return target.getTime() <= now.getTime()
           ? new Date(year + 1, 0, 15, 0, 0, 0).getTime()
           : target.getTime();
