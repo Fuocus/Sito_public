@@ -16,47 +16,56 @@
   <meta name="twitter:description" content="Conoscenza, supporto e empowerment di organizzazioni che generano valore per la società.">
   <meta name="twitter:image" content="https://fuocus.org/immagini%20gloria/3.jpg">
   <link rel="icon" type="image/png" href="iconcina.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@600;700&family=Work+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @font-face {
-      font-family: "DM Sans";
-      src: url("font/DM_Sans/DMSans-VariableFont_opsz,wght.ttf") format("truetype");
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: "MuseoModerno";
-      src: url("font/MuseoModerno/MuseoModerno-VariableFont_wght.ttf") format("truetype");
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
     :root {
-      --bg: rgba(255, 212, 0, 0.12); /* giallo */
-      --accent: #1a005c; /* blu fuocus */
+      --bg: #fffaf0; /* sfondo */
+      --accent: #331f68; /* colore principale dei testi */
       --accent-soft: #8c7dde; /* lilla */
       --accent-hot: #fd4934; /* arancio fuocus */
       --deep: #7d1c2e; /* bordeaux */
-      --ink: #1a005c;
-      --muted: rgba(26, 0, 92, 0.7);
+      --ink: #331f68;
+      --muted: rgba(51, 31, 104, 0.7);
       --card: rgba(140, 125, 222, 0.08);
+      --button-hot: #e54f6d;
+      --button-sun: #f4cf43;
     }
+    html { scroll-behavior: smooth; height: 100%; }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       background: var(--bg);
+      background-image: url("rumore/Bianco.png");
+      background-repeat: repeat;
+      background-size: 520px;
       color: var(--ink);
-      font-family: "DM Sans", system-ui, sans-serif;
+      font-family: "Work Sans", system-ui, sans-serif;
       line-height: 1.6;
+      min-height: 100%;
+      overflow: auto;
+    }
+    .page {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+      scroll-snap-type: y proximity;
+      scroll-padding: 24px;
+      height: auto;
+      overflow-y: visible;
     }
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
-    .page {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 32px 24px 80px;
+    header {
+      margin-bottom: 0;
+      scroll-snap-align: none;
+      scroll-snap-stop: normal;
+      min-height: auto;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      align-items: center;
     }
-    header { margin-bottom: 64px; }
     nav {
       display: flex;
       align-items: center;
@@ -67,9 +76,10 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
+      margin-top: 50px;
     }
     .brand img {
-      height: 100px;
+      height: 60px;
       width: auto;
       display: block;
     }
@@ -81,11 +91,16 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
+    .section-divider {
+      border: 0;
+      border-top: 1px solid rgba(51, 31, 104, 0.25);
+      margin: 0;
+    }
     .hero {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 32px;
-      align-items: center;
+      grid-template-columns: minmax(360px, 1fr) minmax(420px, 1.1fr);
+      gap: 44px;
+      align-items: start;
     }
     .eyebrow {
       display: inline-flex;
@@ -108,10 +123,10 @@
       background: var(--accent);
     }
     h1 {
-      font-family: "MuseoModerno", "DM Sans", sans-serif;
+      font-family: "Martian Mono", "Work Sans", monospace;
       font-size: clamp(36px, 5vw, 54px);
       line-height: 1.05;
-      margin: 16px 0 14px;
+      margin: 46px 0 14px;
       color: var(--accent);
     }
     .lede {
@@ -140,7 +155,7 @@
       gap: 8px;
       padding: 10px 14px;
       border-radius: 12px;
-      background: rgba(255, 212, 0, 0.9);
+      background: var(--button-hot);
       color: var(--accent);
       font-weight: 800;
       letter-spacing: 0.02em;
@@ -148,10 +163,14 @@
       box-shadow: 0 12px 28px rgba(26, 0, 92, 0.18);
       transition: transform 150ms ease, box-shadow 150ms ease;
     }
+    .social-link:nth-child(even) {
+      background: var(--button-sun);
+      color: var(--accent);
+    }
     .social-link:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(125, 28, 46, 0.22); }
     .button {
-      background: var(--accent);
-      color: #ffd400;
+      background: var(--button-hot);
+      color: #ffffff;
       padding: 14px 22px;
       border-radius: 14px;
       font-weight: 700;
@@ -165,12 +184,14 @@
       border: 1px solid rgba(26, 0, 92, 0.22);
       font-weight: 700;
       color: var(--accent);
-      background: rgba(255, 212, 0, 0.16);
+      background: var(--button-sun);
       backdrop-filter: blur(4px);
     }
     .hero-visual {
       position: relative;
       isolate: isolate;
+      justify-self: end;
+      width: 100%;
     }
     .pattern-splash {
       position: absolute;
@@ -183,11 +204,14 @@
       box-shadow: 0 18px 50px rgba(26, 0, 92, 0.24);
     }
     .hero-visual img {
-      width: 100%;
-      border-radius: 20px;
-      box-shadow: 0 18px 38px rgba(26, 0, 92, 0.26);
-      object-fit: cover;
-      min-height: 300px;
+      width: 105%;
+      max-width: 720px;
+      border-radius: 0;
+      box-shadow: none;
+      object-fit: contain;
+      min-height: 560px;
+      background: transparent;
+      margin-right: -8px;
     }
     .logos {
       display: flex;
@@ -201,10 +225,62 @@
       object-fit: contain;
     }
     .section {
-      margin: 72px 0;
+      margin: 0;
+      padding: 32px 0 48px;
+      scroll-snap-align: none;
+      scroll-snap-stop: normal;
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    #chi-siamo {
+      scroll-snap-align: none;
+      scroll-snap-stop: normal;
+      min-height: auto;
+      padding-top: 12px;
+    }
+    #missione {
+      margin-top: 0;
+      padding-top: 0;
+      justify-content: flex-start;
+      background: transparent;
+      color: inherit;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+    .mission-layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.95fr) minmax(380px, 1.05fr);
+      gap: 36px;
+      align-items: stretch;
+    }
+    .mission-figure {
+      display: flex;
+      align-items: flex-start;
+    }
+    .mission-figure img {
+      width: 180%;
+      max-width: none;
+      min-height: 540px;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: translateX(-30%);
+      overflow: visible;
+    }
+    .mission-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
     .section h2 {
-      font-family: "MuseoModerno", "DM Sans", sans-serif;
+      font-family: "Martian Mono", "Work Sans", monospace;
       font-size: clamp(28px, 3vw, 38px);
       margin: 0 0 10px;
       color: var(--accent);
@@ -214,12 +290,20 @@
       color: var(--muted);
       max-width: 720px;
     }
+    #missione .section h2,
+    #missione h2,
+    #missione p { color: inherit; }
+    .mission-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
     .panel-violet {
-      background: rgba(140, 125, 222, 0.16);
-      border: 1px solid rgba(26, 0, 92, 0.16);
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 12px 30px rgba(26, 0, 92, 0.14);
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
     }
     .pill-group {
       display: flex;
@@ -246,16 +330,17 @@
       flex-direction: column;
       gap: 12px;
       padding: 14px;
-      border-radius: 16px;
-      background: var(--card);
-      box-shadow: 0 14px 32px rgba(140, 125, 222, 0.16);
+      border-radius: 0;
+      background: transparent;
+      border: 1px solid rgba(51, 31, 104, 0.22);
+      box-shadow: none;
       transition: transform 160ms ease, box-shadow 160ms ease;
     }
-    .person:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(125, 28, 46, 0.18); }
+    .person:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(51, 31, 104, 0.12); }
     .person img {
       width: 100%;
       height: 240px;
-      border-radius: 12px;
+      border-radius: 0;
       object-fit: cover;
       background: rgba(140, 125, 222, 0.3);
     }
@@ -299,19 +384,17 @@
     }
     .card {
       padding: 16px;
-      background: var(--card);
-      border: 1px solid rgba(26, 0, 92, 0.12);
-      border-radius: 16px;
-      box-shadow: 0 12px 30px rgba(26, 0, 92, 0.12);
+      background: transparent;
+      border: 1px solid rgba(51, 31, 104, 0.22);
+      border-radius: 0;
+      box-shadow: none;
     }
-    .card:nth-child(1) { background: rgba(140, 125, 222, 0.32); border-color: rgba(140, 125, 222, 0.46); }
-    .card:nth-child(2) { background: rgba(253, 73, 52, 0.24); border-color: rgba(253, 73, 52, 0.36); }
-    .card:nth-child(3) { background: rgba(26, 0, 92, 0.2); border-color: rgba(26, 0, 92, 0.32); }
     .card h3 {
       margin: 0 0 8px;
       font-size: 18px;
       font-weight: 800;
       color: var(--accent);
+      font-family: "Martian Mono", "Work Sans", monospace;
     }
     .card p {
       margin: 0;
@@ -340,7 +423,7 @@
       border-radius: 20px;
       padding: 28px;
       background: transparent;
-      color: #ffffff;
+      color: var(--accent);
       box-shadow: none;
     }
     .cta-banner::after {
@@ -354,12 +437,12 @@
     .cta-content { position: relative; z-index: 1; }
     .cta-content h3 {
       margin: 0 0 10px;
-      font-family: "MuseoModerno", "DM Sans", sans-serif;
+      font-family: "Martian Mono", "Work Sans", monospace;
       font-size: 26px;
     }
     .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
     .cta-actions .button { box-shadow: 0 6px 14px rgba(26, 0, 92, 0.18); }
-    .cta-actions .ghost { color: #ffd400; border-color: rgba(255, 212, 0, 0.7); }
+    .cta-actions .ghost { color: var(--accent); border-color: rgba(255, 212, 0, 0.7); }
     .countdown {
       display: inline-flex;
       align-items: center;
@@ -368,14 +451,15 @@
       border-radius: 14px;
       background: rgba(140, 125, 222, 0.2);
       color: var(--accent);
-      font-weight: 700;
+      font-weight: 400;
       letter-spacing: 0.02em;
+      margin-bottom: 0;
     }
     .countdown .segments {
       display: inline-flex;
       align-items: baseline;
       gap: 10px;
-      font-family: "DM Sans", "MuseoModerno", monospace;
+      font-family: "Work Sans", "Martian Mono", monospace;
     }
     .countdown .segment {
       display: grid;
@@ -392,6 +476,7 @@
       font-variant-numeric: tabular-nums;
       letter-spacing: 0.04em;
       color: var(--accent);
+      font-weight: 600;
     }
     .countdown .label {
       font-size: 11px;
@@ -405,9 +490,16 @@
       letter-spacing: 0.08em;
       color: var(--accent);
     }
+    .timer-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
     footer {
       margin-top: 48px;
-      color: rgba(26, 0, 92, 0.6);
+      color: rgba(51, 31, 104, 0.8);
       font-size: 14px;
       text-align: center;
     }
@@ -423,10 +515,10 @@
       justify-content: space-between;
       gap: 12px;
       padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(140, 125, 222, 0.2);
-      border: 1px solid rgba(26, 0, 92, 0.18);
-      box-shadow: 0 10px 24px rgba(26, 0, 92, 0.14);
+      border-radius: 0;
+      background: transparent;
+      border: 1px solid rgba(51, 31, 104, 0.25);
+      box-shadow: none;
     }
     .supporter-card strong {
       color: var(--accent);
@@ -445,7 +537,7 @@
       object-fit: contain;
       background: #ffffff;
       padding: 8px 10px;
-      border-radius: 10px;
+      border-radius: 0;
     }
     @media (min-width: 980px) {
       .people {
@@ -455,8 +547,66 @@
     @media (max-width: 640px) {
       .nav-links { display: none; }
       .page { padding: 24px 18px 64px; }
-      .hero { gap: 22px; }
+      .hero {
+        gap: 22px;
+        grid-template-columns: 1fr;
+      }
       .person img { height: 200px; }
+    }
+    @media (max-width: 900px) {
+      .section-shell,
+      .section-shell.reverse {
+        grid-template-columns: 1fr;
+      }
+      .disegno-slot {
+        min-height: 200px;
+      }
+      .hero-visual img {
+        width: 100%;
+        margin-right: 0;
+        min-height: 360px;
+        max-width: none;
+      }
+      .mission-layout {
+        grid-template-columns: 1fr;
+      }
+      .mission-figure {
+        transform: none;
+        align-items: stretch;
+      }
+      .mission-figure img {
+        max-width: 100%;
+        width: 100%;
+        transform: none;
+        height: auto;
+        min-height: 300px;
+        object-fit: cover;
+      }
+      body {
+        overflow: auto;
+      }
+      .page {
+        height: auto;
+        min-height: auto;
+        overflow-y: visible;
+        scroll-snap-type: none;
+      }
+      header, .section {
+        min-height: auto;
+        scroll-snap-align: none;
+        scroll-snap-stop: normal;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-visual { order: 2; }
+      .mission-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .mission-copy { order: 1; }
+      .mission-figure { order: 2; }
     }
   </style>
   <script type="text/javascript">
@@ -472,11 +622,11 @@
     <header>
       <nav>
         <div class="brand">
-          <img src="Logo%20fuocus%20blu%20-%20RGB.png" alt="Fuocus">
+          <img src="logo_blu.png" alt="Fuocus">
         </div>
         <div class="nav-links">
           <a href="#chi-siamo">Chi siamo</a>
-          <a href="#contatti">Contatti</a>
+          <a href="mailto:isacco.gavazzi@fondazionepoetica.it">Contatti</a>
         </div>
       </nav>
       <div class="hero">
@@ -484,80 +634,72 @@
           <h1>La rivoluzione dell'attenzione</h1>
           <p class="lede">Conoscenza, supporto e empowerment di 
             organizzazioni che generano valore per la società</p>
-          <div class="cta">
-            <a class="button" href="#contatti">Parliamone assieme</a>
-            <a class="ghost" href="#chi-siamo">Chi siamo?</a>
-          </div>
-          <div class="countdown" id="countdown">
-            <div class="segments">
-              <div class="segment">
-                <div class="num" data-unit="days">00</div>
-                <div class="label">Giorni</div>
+          <div class="timer-row">
+            <div class="countdown" id="countdown">
+              <div class="segments">
+                <div class="segment">
+                  <div class="num" data-unit="days">00</div>
+                  <div class="label">Giorni</div>
+                </div>
+                <div class="segment">
+                  <div class="num" data-unit="hours">00</div>
+                  <div class="label">Ore</div>
+                </div>
+                <div class="segment">
+                  <div class="num" data-unit="minutes">00</div>
+                  <div class="label">Min</div>
+                </div>
+                <div class="segment">
+                  <div class="num" data-unit="seconds">00</div>
+                  <div class="label">Sec</div>
+                </div>
               </div>
-              <div class="segment">
-                <div class="num" data-unit="hours">00</div>
-                <div class="label">Ore</div>
-              </div>
-              <div class="segment">
-                <div class="num" data-unit="minutes">00</div>
-                <div class="label">Min</div>
-              </div>
-              <div class="segment">
-                <div class="num" data-unit="seconds">00</div>
-                <div class="label">Sec</div>
-              </div>
+              <div class="note">al lancio della piattaforma</div>
             </div>
-            <div class="note">al lancio della piattaforma</div>
+            <a class="ghost" href="#chi-siamo">Chi siamo</a>
+          </div>
+          <hr class="section-divider" style="margin: 16px 0;">
+          <p class="lede" style="margin-top: 0; max-width: 640px;">Siamo qui per ascoltare progetti e idee che generano valore per la società.</p>
+          <div class="cta">
+            <a class="button" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0LUzBNAYDaBHtM6-wJOAW2VT4YLs9S_1CBDPI8OY7zZT3i1Tei1dMWL9LcNcJRXcNPVSbeEJwj" target="_blank" rel="noopener">Raccontaci a cosa dai attenzione</a>
+            <a class="ghost" href="mailto:isacco.gavazzi@fondazionepoetica.it">Scrivici</a>
           </div>
         </div>
         <div class="hero-visual">
-          <div class="pattern-splash"></div>
-          <img src="immagini gloria/3.jpg" alt="Visivo del progetto">
+          <img src="disegni/labirinto.png" alt="Illustrazione labirinto">
         </div>
       </div>
     </header>
-
-
+    <hr class="section-divider">
     <section class="section" id="missione">
-      <h2>Missione e visione</h2>
-      <p>Fuocus vuole potenziare organizzazioni che generano valore per la società mettendole in contatto con i giovani più motivati e attenti. Gratuitamente, per tutti. <br>
-        Dalle associazioni di quartiere a un'azienda che investe in rinnovabili, quello che ci interessa è il tuo impatto, sulla comunità, la città, l'italia, il pianeta.
-        <br>
+      <div class="mission-layout">
+        <figure class="mission-figure">
+          <img src="disegni/uomini.png" alt="Illustrazione persone">
+        </figure>
+        <div class="mission-copy">
+          <h2>Missione e visione</h2>
+          <p>Fuocus vuole potenziare organizzazioni che generano valore per la società mettendole in contatto con i giovani più motivati e attenti. Gratuitamente, per tutti. <br>
+            Dalle associazioni di quartiere a un'azienda che investe in rinnovabili, quello che ci interessa è il tuo impatto, sulla comunità, la città, l'italia, il pianeta.
+            <br>
 
-      </p>
-      <div class="grid">
-        <div class="card">
-          <h3>Organizzazioni e progetti</h3>
-          <p>Facciamo scoprire organizzazioni e progetti in cui il successo è un successo per tutta la società</p>
-        </div>
-        <div class="card">
-          <h3>Lavoro</h3>
-          <p>Diamo la possibilità di cercare posizioni di lavoro mettendo al centro l'impatto sul mondo e non solo il job title.</p>
-        </div>
-        <div class="card">
-          <h3>Ispiriamo il cambiamento</h3>
-          <p>Realizziamo podcast per raccontare le storie delle organizzazioni che ci piacciono e facciamo corsi per aiutare altri a cambiare il mondo per il meglio</p>
-        </div>
-      </div>
-    </section>
-    <section id="contatti" class="section">
-      <div class="cta-banner">
-        <div class="cta-content">
-          <h3>Raccontaci a cosa dai attenzione</h3>
-          <p style="max-width: 620px; margin: 0; color: #ffffff;">Stiamo cercando organizzazioni che si battono per qualcosa che conta davvero. Parlaci del tuo contributo e proviamo a crescere assieme.</p>
-          <div class="cta-actions">
-            <a class="button" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0LUzBNAYDaBHtM6-wJOAW2VT4YLs9S_1CBDPI8OY7zZT3i1Tei1dMWL9LcNcJRXcNPVSbeEJwj" target="_blank" rel="noopener">Prenota una chiamata</a>
-            <a class="ghost" href="mailto:isacco.gavazzi@fondazionepoetica.it">Scrivi a noi</a>
+          </p>
+          <div class="mission-cards">
+            <div class="card">
+              <h3>Organizzazioni e progetti</h3>
+              <p>Facciamo scoprire organizzazioni e progetti in cui il successo è un successo per tutta la società</p>
+            </div>
+            <div class="card">
+              <h3>Lavoro</h3>
+              <p>Diamo la possibilità di cercare posizioni di lavoro mettendo al centro l'impatto sul mondo e non solo il job title.</p>
+            </div>
+            <div class="card">
+              <h3>Ispiriamo il cambiamento</h3>
+              <p>Realizziamo podcast per raccontare le storie delle organizzazioni che ci piacciono e facciamo corsi per aiutare altri a cambiare il mondo per il meglio</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
-
-
-
-
- 
-
     <section id="chi-siamo" class="section">
       <div class="panel-violet">
         <h2>Chi siamo</h2>
@@ -635,10 +777,8 @@
             </div>
           </div>
         </div>
-
       </div>
     </section>
-
     
     <footer>
       Fuocus &mdash; la rivoluzione dell'attenzione.
@@ -648,6 +788,36 @@
       </div>
     </footer>
   </div>
+  <script>
+    (function() {
+      const container = document.querySelector(".page");
+      if (!container) return;
+      const targets = Array.from(container.querySelectorAll("header, .section"));
+      let snapTimer = null;
+      const positionFor = (el) => {
+        const cRect = container.getBoundingClientRect();
+        const eRect = el.getBoundingClientRect();
+        return (eRect.top - cRect.top) + container.scrollTop;
+      };
+      const snapToNearest = () => {
+        const current = container.scrollTop;
+        let nearest = targets[0];
+        let dist = Math.abs(positionFor(nearest) - current);
+        for (const el of targets) {
+          const d = Math.abs(positionFor(el) - current);
+          if (d < dist) {
+            nearest = el;
+            dist = d;
+          }
+        }
+        container.scrollTo({ top: positionFor(nearest), behavior: "smooth" });
+      };
+      container.addEventListener("scroll", () => {
+        if (snapTimer) clearTimeout(snapTimer);
+        snapTimer = setTimeout(snapToNearest, 120);
+      });
+    })();
+  </script>
   <script>
     (function() {
       const el = document.getElementById("countdown");

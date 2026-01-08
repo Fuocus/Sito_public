@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi siamo | Fuocus</title>
+  <meta name="description" content="Chi siamo - Fuocus, la rivoluzione dell'attenzione.">
+  <link rel="icon" type="image/png" href="iconcina.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@600;700&family=Work+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fffaf0;
+      --accent: #331f68;
+      --accent-soft: #8c7dde;
+      --accent-hot: #fd4934;
+      --deep: #7d1c2e;
+      --ink: #331f68;
+      --muted: rgba(51, 31, 104, 0.7);
+      --card: rgba(140, 125, 222, 0.08);
+      --button-hot: #e54f6d;
+      --button-sun: #f4cf43;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      background-image: url("rumore/Bianco.png");
+      background-repeat: repeat;
+      background-size: 520px;
+      color: var(--ink);
+      font-family: "Work Sans", system-ui, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+    header { margin-bottom: 48px; }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand img {
+      height: 60px;
+      width: auto;
+      display: block;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    h1 {
+      font-family: "Martian Mono", "Work Sans", monospace;
+      font-size: clamp(32px, 4vw, 46px);
+      line-height: 1.05;
+      margin: 0 0 10px;
+      color: var(--accent);
+    }
+    h2 {
+      font-family: "Martian Mono", "Work Sans", monospace;
+      font-size: clamp(28px, 3vw, 38px);
+      margin: 0 0 10px;
+      color: var(--accent);
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+    .section {
+      margin: 48px 0;
+    }
+    .panel-violet {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+    .supporters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .supporter-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: transparent;
+      border: 1px solid rgba(51, 31, 104, 0.25);
+      box-shadow: none;
+    }
+    .supporter-card strong {
+      color: var(--accent);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: block;
+    }
+    .supporter-card .supporter-note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .supporter-card img {
+      height: 72px;
+      width: auto;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+    .people {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+    .person {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      background: transparent;
+      border: 1px solid rgba(51, 31, 104, 0.22);
+      box-shadow: none;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .person:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(51, 31, 104, 0.12); }
+    .person img {
+      width: 100%;
+      height: 240px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: rgba(140, 125, 222, 0.3);
+    }
+    .person .meta { display: flex; align-items: center; justify-content: space-between; }
+    .person .name {
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--ink);
+    }
+    .person .role {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .contact-links a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(51, 31, 104, 0.4);
+      text-decoration-thickness: 1.5px;
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .page { padding: 24px 18px 64px; }
+      .person img { height: 200px; }
+    }
+    @media (min-width: 980px) {
+      .people {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <nav>
+        <div class="brand">
+          <a href="index.html">
+            <img src="logo_blu.png" alt="Fuocus">
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="index.html#contatti">Contatti</a>
+        </div>
+      </nav>
+      <h1>Chi siamo</h1>
+      <p>Conosci il team e chi supporta la rivoluzione dell'attenzione.</p>
+    </header>
+
+    <section class="section">
+      <div class="panel-violet">
+        <h2>La rete</h2>
+        <div class="supporters">
+          <div class="supporter-card">
+            <div>
+              <strong>A partire da</strong>
+              <div class="supporter-note">Fondazione Poetica</div>
+            </div>
+            <a href="https://fondazionepoetica.it" target="_blank" rel="noopener">
+              <img src="immagini/poetica.png" alt="Fondazione Poetica">
+            </a>
+          </div>
+          <div class="supporter-card">
+            <div>
+              <strong>Finanziatore</strong>
+              <div class="supporter-note">Fondazione Cariplo</div>
+            </div>
+            <a href="https://www.fondazionecariplo.it" target="_blank" rel="noopener">
+              <img src="immagini/cariplo.png" alt="Fondazione Cariplo">
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel-violet">
+        <h2>Il team</h2>
+        <div class="people">
+          <div class="person">
+            <img src="immagini/isacco.png" alt="Isacco" style="object-position: top;">
+            <div class="meta">
+              <div class="name">Isacco</div>
+              <div class="role">Membro Fondatore</div>
+            </div>
+            <p>Isacco Gavazzi (classe 1997), matematico, ex innovation manager di un broker assicurativo, appassionato un po di tutto, oltre a Fuocus fa del cucito e cucina in delle associazioni. 
+            </p>
+            <div class="contact-links">
+              <a href="https://www.linkedin.com/in/whatisacco/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+          <div class="person">
+            <img src="immagini/martino.jpeg" alt="Martino" style="object-position: center;">
+            <div class="meta">
+              <div class="name">Martino</div>
+              <div class="role">Membro Fondatore</div>
+            </div>
+            <p>Martino Guggiari (classe 1999), ha fatto il product manager, ha provato a fare una startup nella sylver economy, ama la falegnameria e passa sempre più tempo negli arci di Milano</p>
+            <div class="contact-links">
+              <a href="https://www.linkedin.com/in/martinoguggiari/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+          <div class="person">
+            <img src="immagini/isacco e martino.png" alt="Isacco e Martino" style="object-position: center;">
+            <div class="meta">
+              <div class="name">Isacco e Martino</div>
+              <div class="role">Ci diamo forza a vicenda</div>
+            </div>
+          </div>
+          <div class="person">
+            <img src="immagini/MIRKO.png" alt="Mirko Di Rienzo" style="object-position: center;">
+            <div class="meta">
+              <div class="name">Mirko</div>
+              <div class="role">Rapporti con organizzazioni</div>
+            </div>
+            <p>Mirko Di Rienzo (classe 1997), si è formato come tecnico audiovisivo e poi ne ha provate di ogni, dedicandosi a vari progetti musicali.</p>
+            <div class="contact-links">
+              <a href="https://www.linkedin.com/in/mirko-di-rienzo-466712399" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+          <div class="person">
+            <img src="immagini/camilla.png" alt="Camilla Miryam Checchi" style="object-position: center;">
+            <div class="meta">
+              <div class="name">Camilla</div>
+              <div class="role">Responsabile comunicazione</div>
+            </div>
+            <p>Camilla Miryam Checchi (classe 1999), graphic designer, con un passato nella rigenerazione urbana e nella consulenza per enti del terzo settore, ex capo scout e amante di concerti indie.</p>
+            <div class="contact-links">
+              <a href="https://www.linkedin.com/in/camillachecchi/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
