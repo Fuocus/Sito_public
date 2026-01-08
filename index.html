@@ -90,11 +90,12 @@
       font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
+      align-items: center;
     }
     .section-divider {
       border: 0;
       border-top: 1px solid rgba(51, 31, 104, 0.25);
-      margin: 0;
+      margin: 0 0 24px;
     }
     .hero {
       display: grid;
@@ -147,32 +148,34 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 0;
+    }
+    .nav-links .social-links {
+      gap: 12px;
+      margin-top: 0;
+      padding-left: 12px;
+      border-left: 1px solid rgba(51, 31, 104, 0.25);
     }
     .social-link {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: var(--button-hot);
+      gap: 6px;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
       color: var(--accent);
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.02em;
-      border: 1px solid #6b4dd1;
-      box-shadow: 0 12px 28px rgba(26, 0, 92, 0.18);
-      transition: transform 150ms ease, box-shadow 150ms ease;
+      border: none;
+      box-shadow: none;
+      transition: color 150ms ease;
     }
-    .social-link:nth-child(even) {
-      background: var(--button-sun);
-      color: var(--accent);
-    }
-    .social-link:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(125, 28, 46, 0.22); }
+    .social-link:hover { color: #9170ff; }
     .button {
       background: var(--button-hot);
       color: #ffffff;
       padding: 14px 22px;
-      border-radius: 14px;
+      border-radius: 0;
       font-weight: 700;
       box-shadow: 0 12px 28px rgba(26, 0, 92, 0.24);
       transition: transform 150ms ease, box-shadow 150ms ease;
@@ -180,11 +183,11 @@
     .button:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(125, 28, 46, 0.28); }
     .ghost {
       padding: 12px 18px;
-      border-radius: 12px;
-      border: 1px solid #6b4dd1;
+      border-radius: 0;
+      border: 1px solid #9170ff;
       font-weight: 700;
-      color: var(--accent);
-      background: var(--button-sun);
+      color: #9170ff;
+      background: #ffffff;
       backdrop-filter: blur(4px);
     }
     .hero-visual {
@@ -445,11 +448,11 @@
     .cta-actions .ghost { color: var(--accent); border-color: rgba(255, 212, 0, 0.7); }
     .countdown {
       display: inline-flex;
-      align-items: center;
+      align-items: baseline;
       gap: 12px;
-      padding: 12px 16px;
-      border-radius: 14px;
-      background: rgba(140, 125, 222, 0.2);
+      padding: 0;
+      border-radius: 0;
+      background: none;
       color: var(--accent);
       font-weight: 400;
       letter-spacing: 0.02em;
@@ -458,18 +461,17 @@
     .countdown .segments {
       display: inline-flex;
       align-items: baseline;
-      gap: 10px;
+      gap: 12px;
       font-family: "Work Sans", "Martian Mono", monospace;
     }
     .countdown .segment {
-      display: grid;
-      grid-auto-flow: row;
-      align-items: center;
-      justify-items: center;
-      background: rgba(26, 0, 92, 0.08);
-      padding: 8px 10px;
-      border-radius: 10px;
-      min-width: 62px;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      min-width: auto;
+      padding: 0;
+      background: none;
+      border-radius: 0;
     }
     .countdown .num {
       font-size: 20px;
@@ -627,6 +629,10 @@
         <div class="nav-links">
           <a href="#chi-siamo">Chi siamo</a>
           <a href="mailto:isacco.gavazzi@fondazionepoetica.it">Contatti</a>
+          <div class="social-links" aria-label="Canali social di Fuocus">
+            <a class="social-link" href="https://www.linkedin.com/company/fuocus/" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="social-link" href="https://www.instagram.com/fuocus_it/" target="_blank" rel="noopener">Instagram</a>
+          </div>
         </div>
       </nav>
       <div class="hero">
@@ -656,7 +662,6 @@
               </div>
               <div class="note">al lancio della piattaforma</div>
             </div>
-            <a class="ghost" href="#chi-siamo">Chi siamo</a>
           </div>
           <hr class="section-divider" style="margin: 16px 0;">
           <p class="lede" style="margin-top: 0; max-width: 640px;">Siamo qui per ascoltare progetti e idee che generano valore per la società.</p>
@@ -782,10 +787,6 @@
     
     <footer>
       Fuocus &mdash; la rivoluzione dell'attenzione.
-      <div class="social-links" aria-label="Canali social di Fuocus">
-        <a class="social-link" href="https://www.linkedin.com/company/fuocus/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="social-link" href="https://www.instagram.com/fuocus_it/" target="_blank" rel="noopener">Instagram</a>
-      </div>
     </footer>
   </div>
   <script>
@@ -842,12 +843,17 @@
         const now = Date.now();
         const diff = target - now;
         if (diff <= 0) {
-          el.textContent = "Siamo live!";
+          if (segments.days) el.textContent = "Siamo live!";
           return;
         }
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        el.textContent = `${days}g ${hours}h al lancio della piattaforma`;
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        if (segments.days) segments.days.textContent = pad(days);
+        if (segments.hours) segments.hours.textContent = pad(hours);
+        if (segments.minutes) segments.minutes.textContent = pad(minutes);
+        if (segments.seconds) segments.seconds.textContent = pad(seconds);
         requestAnimationFrame(() => setTimeout(tick, 1000));
       };
       tick();
