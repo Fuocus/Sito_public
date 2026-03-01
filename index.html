@@ -143,81 +143,6 @@
       gap: 14px;
       margin-bottom: 26px;
     }
-    .update-card {
-      margin-top: 20px;
-      padding: 18px;
-      border: 1px solid #6b4dd1;
-      background: rgba(140, 125, 222, 0.08);
-      box-shadow: none;
-    }
-    .update-card h3 {
-      margin: 0 0 8px;
-      font-family: "Martian Mono", "Work Sans", monospace;
-      font-size: 18px;
-      color: var(--accent);
-    }
-    .update-card p {
-      margin: 0 0 12px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-    label {
-      font-weight: 700;
-      font-size: 13px;
-      color: var(--accent);
-      display: block;
-      margin-bottom: 6px;
-      letter-spacing: 0.02em;
-    }
-    input[type="text"],
-    input[type="email"] {
-      width: 100%;
-      padding: 12px 12px;
-      border: 1px solid rgba(51, 31, 104, 0.28);
-      background: #ffffff;
-      color: var(--ink);
-      font-size: 14px;
-      border-radius: 0;
-      box-shadow: none;
-    }
-    .consent-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin: 10px 0 12px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .consent-row input {
-      margin-top: 2px;
-    }
-    .consent-row label {
-      margin: 0;
-      font-weight: 600;
-      color: var(--accent);
-    }
-    .informativa {
-      font-size: 12px;
-      color: var(--muted);
-      margin: 0 0 10px;
-      line-height: 1.5;
-    }
-    .update-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .note-mailto {
-      font-size: 12px;
-      color: var(--muted);
-    }
     .social-links {
       display: flex;
       flex-wrap: wrap;
@@ -745,31 +670,6 @@
             <a class="button" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0LUzBNAYDaBHtM6-wJOAW2VT4YLs9S_1CBDPI8OY7zZT3i1Tei1dMWL9LcNcJRXcNPVSbeEJwj" target="_blank" rel="noopener">Raccontaci a cosa dai attenzione</a>
             <a class="ghost" href="mailto:isacco.gavazzi@fondazionepoetica.it">Scrivici</a>
           </div>
-          <div class="update-card">
-            <h3>Ricevi gli aggiornamenti</h3>
-            <p>Lasciaci nome ed email: ti avviseremo quando ci sono novità o quando la piattaforma sarà online.</p>
-            <form id="updates-form">
-              <div class="form-grid">
-                <div>
-                  <label for="upd-name">Nome</label>
-                  <input id="upd-name" name="name" type="text" placeholder="Il tuo nome" required>
-                </div>
-                <div>
-                  <label for="upd-email">Email</label>
-                  <input id="upd-email" name="email" type="email" placeholder="nome@email.it" required>
-                </div>
-              </div>
-              <p class="informativa">Useremo il tuo contatto solo per inviarti aggiornamenti su Fuocus. Titolare del trattamento: Fondazione Poetica. Puoi chiedere la cancellazione o rettifica in ogni momento scrivendo a isacco.gavazzi@fondazionepoetica.it.</p>
-              <div class="consent-row">
-                <input id="upd-consent" name="consent" type="checkbox" required>
-                <label for="upd-consent">Ho letto e accetto la mini informativa sul trattamento dei dati.</label>
-              </div>
-              <div class="update-actions">
-                <button class="button" type="submit">Invia</button>
-                <span class="note-mailto">Si aprirà la tua app email per confermare l'invio.</span>
-              </div>
-            </form>
-          </div>
         </div>
         <div class="hero-visual">
           <img src="disegni/labirinto.png" alt="Illustrazione labirinto">
@@ -886,37 +786,6 @@
   </div>
   <script>
     (function() {
-      const form = document.getElementById("updates-form");
-      if (!form) return;
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const name = (form.querySelector('[name="name"]')?.value || "").trim();
-        const email = (form.querySelector('[name="email"]')?.value || "").trim();
-        const consent = form.querySelector('[name="consent"]');
-        if (!name || !email) {
-          alert("Inserisci nome ed email per continuare.");
-          return;
-        }
-        if (!consent?.checked) {
-          alert("Devi accettare la mini informativa per proseguire.");
-          return;
-        }
-        const subject = encodeURIComponent("Richiesta aggiornamenti - sito Fuocus");
-        const bodyLines = [
-          "Nuova richiesta di aggiornamenti dal sito Fuocus.",
-          "",
-          `Nome: ${name}`,
-          `Email: ${email}`,
-          "Autorizzazione trattamento dati: sì"
-        ];
-        const body = encodeURIComponent(bodyLines.join("\n"));
-        window.location.href = `mailto:isacco.gavazzi@fondazionepoetica.it?subject=${subject}&body=${body}`;
-        form.reset();
-      });
-    })();
-  </script>
-  <script>
-    (function() {
       const container = document.querySelector(".page");
       if (!container) return;
       const targets = Array.from(container.querySelectorAll("header, .section"));
@@ -949,15 +818,7 @@
     (function() {
       const el = document.getElementById("countdown");
       if (!el) return;
-      const targetDate = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const target = new Date(year, 1, 30, 0, 0, 0); // 15 gennaio
-        return target.getTime() <= now.getTime()
-          ? new Date(year + 1, 0, 15, 0, 0, 0).getTime()
-          : target.getTime();
-      };
-      let target = targetDate();
+      const target = new Date(2026, 2, 10, 0, 0, 0).getTime(); // 10/03/2026
       const segments = {
         days: el.querySelector('[data-unit="days"]'),
         hours: el.querySelector('[data-unit="hours"]'),
