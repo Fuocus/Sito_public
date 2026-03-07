@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ImageRip — Estrai immagini da qualsiasi sito</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #222222;
+    --accent: #e8ff47;
+    --accent2: #ff6b35;
+    --text: #f0f0f0;
+    --muted: #555;
+    --radius: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232,255,71,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,255,71,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    letter-spacing: -2px;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  /* INPUT AREA */
+  .input-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color 0.2s;
+  }
+  .input-row:focus-within {
+    border-color: var(--accent);
+  }
+
+  #urlInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 14px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+  #urlInput::placeholder { color: var(--muted); }
+
+  #fetchBtn {
+    background: var(--accent);
+    color: #0a0a0a;
+    border: none;
+    padding: 14px 28px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.15s, transform 0.1s;
+  }
+  #fetchBtn:hover { background: #fff; }
+  #fetchBtn:active { transform: scale(0.97); }
+  #fetchBtn:disabled { background: var(--muted); cursor: not-allowed; color: #333; }
+
+  .hint {
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .hint a { color: var(--accent2); text-decoration: none; }
+
+  /* STATUS */
+  #status {
+    font-size: 0.78rem;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: rgba(232,255,71,0.05);
+    margin-bottom: 24px;
+    display: none;
+    font-style: italic;
+    animation: fadeIn 0.3s ease;
+  }
+  #status.error {
+    border-color: #ff4444;
+    background: rgba(255,68,68,0.05);
+    color: #ff8888;
+  }
+  #status.show { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; } }
+
+  /* PROGRESS */
+  #progressBar {
+    height: 2px;
+    background: var(--border);
+    margin-bottom: 32px;
+    display: none;
+    overflow: hidden;
+  }
+  #progressBar.show { display: block; }
+  #progressFill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* SECTIONS */
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* IMAGE CARDS */
+  .image-section { margin-bottom: 40px; }
+
+  .card-grid {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  .card-grid.large { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+
+  .img-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+    aspect-ratio: 1;
+  }
+  .img-card:hover { border-color: var(--accent); transform: scale(1.02); }
+  .img-card.selected {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .img-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 6px; right: 6px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 20px;
+    text-align: center;
+  }
+
+  .img-card img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 4px;
+    display: block;
+  }
+
+  .img-card .badge {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.75);
+    font-size: 0.55rem;
+    padding: 3px 5px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .img-card:hover .badge { opacity: 1; }
+
+  /* LOGO SPECIAL */
+  .logo-card {
+    max-width: 240px;
+    aspect-ratio: auto;
+    min-height: 80px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .logo-card:hover { border-color: var(--accent); }
+  .logo-card.selected {
+    border-color: var(--accent);
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .logo-card img { max-width: 100%; max-height: 80px; object-fit: contain; }
+
+  /* DOWNLOAD BAR */
+  #downloadBar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 16px 24px;
+    display: none;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    animation: slideUp 0.3s ease;
+  }
+  #downloadBar.show { display: flex; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  #selCount {
+    font-size: 0.78rem;
+    color: var(--muted);
+    flex: 1;
+  }
+  #selCount span { color: var(--accent); font-weight: 700; }
+
+  #downloadBtn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 12px 28px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  #downloadBtn:hover { background: #fff; }
+
+  #selectAllBtn {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 12px 20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  #selectAllBtn:hover { background: var(--accent); color: #000; }
+
+  .empty-msg {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-style: italic;
+    padding: 16px 0;
+  }
+
+  /* SPINNER */
+  .spinner {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border: 2px solid var(--muted);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .proxy-note {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.6;
+  }
+  .proxy-note code {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    font-size: 0.68rem;
+    color: var(--accent2);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>ImageRip</h1>
+  </header>
+  <p class="tagline">// estrai logo · cover · galleria da qualsiasi sito → ZIP</p>
+
+  <div class="input-row">
+    <input type="text" id="urlInput" placeholder="https://esempio.com" autocomplete="off" spellcheck="false"/>
+    <button id="fetchBtn" onclick="startFetch()">Analizza →</button>
+  </div>
+  <p class="hint">
+    Inserisci l'URL del sito. Le immagini vengono scaricate e classificate automaticamente.<br>
+    <span style="color:#666">⚠ Alcuni siti bloccano richieste cross-origin — in quel caso usa un proxy CORS locale.</span>
+  </p>
+
+  <div id="status"></div>
+  <div id="progressBar"><div id="progressFill"></div></div>
+
+  <div id="results" style="display:none">
+
+    <div class="image-section" id="logoSection">
+      <p class="section-label">Logo rilevato</p>
+      <div id="logoContainer"></div>
+    </div>
+
+    <div class="image-section" id="coverSection">
+      <p class="section-label">Immagine copertina (Open Graph / hero)</p>
+      <div id="coverContainer"></div>
+    </div>
+
+    <div class="image-section" id="gallerySection">
+      <p class="section-label">Galleria immagini</p>
+      <div id="galleryContainer" class="card-grid large"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- DOWNLOAD BAR -->
+<div id="downloadBar">
+  <div id="selCount"><span id="selNum">0</span> immagini selezionate</div>
+  <button id="selectAllBtn" onclick="toggleSelectAll()">Seleziona tutto</button>
+  <button id="downloadBtn" onclick="downloadZip()">⬇ Scarica ZIP</button>
+</div>
+
+<script>
+const PROXIES = [
+  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+  url => `https://cors-anywhere.herokuapp.com/${url}`,
+];
+
+let allImages = []; // { url, category, blob?, selected }
+let selectedImages = new Set();
+let allSelected = false;
+
+function setStatus(msg, isError = false) {
+  const el = document.getElementById('status');
+  el.innerHTML = msg;
+  el.className = 'show' + (isError ? ' error' : '');
+}
+
+function setProgress(pct) {
+  const bar = document.getElementById('progressBar');
+  const fill = document.getElementById('progressFill');
+  if (pct === null) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  fill.style.width = pct + '%';
+}
+
+async function fetchWithProxy(url) {
+  // Try direct first
+  try {
+    const r = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (r.ok) return r;
+  } catch(e) {}
+  // Try proxies
+  for (const proxy of PROXIES) {
+    try {
+      const r = await fetch(proxy(url), { signal: AbortSignal.timeout(10000) });
+      if (r.ok) return r;
+    } catch(e) {}
+  }
+  throw new Error('Non riesco a raggiungere il sito (CORS bloccato)');
+}
+
+async function startFetch() {
+  let url = document.getElementById('urlInput').value.trim();
+  if (!url) return;
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+  document.getElementById('fetchBtn').disabled = true;
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('downloadBar').classList.remove('show');
+  allImages = []; selectedImages.clear();
+  setProgress(5);
+  setStatus('<span class="spinner"></span>Scaricando la pagina…');
+
+  let html, baseUrl;
+  try {
+    const resp = await fetchWithProxy(url);
+    html = await resp.text();
+    baseUrl = url;
+  } catch(e) {
+    setStatus('❌ ' + e.message, true);
+    setProgress(null);
+    document.getElementById('fetchBtn').disabled = false;
+    return;
+  }
+
+  setProgress(20);
+  setStatus('<span class="spinner"></span>Analizzando il DOM…');
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const base = new URL(baseUrl);
+
+  function resolve(src) {
+    if (!src || src.startsWith('data:') || src.startsWith('blob:')) return null;
+    try {
+      return new URL(src, base).href;
+    } catch(e) { return null; }
+  }
+
+  // ── LOGO detection ──────────────────────────────────────────────
+  const logoUrls = new Set();
+  const logoSelectors = [
+    'img[class*="logo" i]',
+    'img[id*="logo" i]',
+    'img[alt*="logo" i]',
+    'a[class*="logo" i] img',
+    'header img',
+    'nav img',
+    '.navbar img', '.header img',
+    'link[rel*="icon"]',
+    'link[rel*="apple-touch-icon"]',
+  ];
+  for (const sel of logoSelectors) {
+    doc.querySelectorAll(sel).forEach(el => {
+      const src = resolve(el.src || el.href || el.getAttribute('href'));
+      if (src) logoUrls.add(src);
+    });
+  }
+  // Also check site manifest / OG site_name image
+  const ogImage = doc.querySelector('meta[property="og:image"]')?.content;
+
+  // ── COVER image ─────────────────────────────────────────────────
+  const coverCandidates = [];
+  const metas = ['og:image', 'twitter:image', 'twitter:image:src'];
+  for (const m of metas) {
+    const v = doc.querySelector(`meta[property="${m}"], meta[name="${m}"]`)?.content;
+    if (v) { const u = resolve(v); if (u) coverCandidates.push(u); }
+  }
+  // Hero images: large imgs in header/section
+  doc.querySelectorAll('section img, header img, .hero img, .banner img, [class*="hero" i] img, [class*="banner" i] img').forEach(img => {
+    const u = resolve(img.src || img.dataset.src || img.dataset.lazySrc);
+    if (u) coverCandidates.push(u);
+  });
+
+  // ── GALLERY: all images ─────────────────────────────────────────
+  const galleryUrls = new Set();
+  doc.querySelectorAll('img').forEach(img => {
+    const src = img.src || img.dataset.src || img.dataset.lazySrc || img.dataset.original;
+    const u = resolve(src);
+    if (u && !logoUrls.has(u)) galleryUrls.add(u);
+  });
+  // srcset
+  doc.querySelectorAll('img[srcset], source[srcset]').forEach(el => {
+    el.srcset.split(',').forEach(part => {
+      const u = resolve(part.trim().split(/\s+/)[0]);
+      if (u) galleryUrls.add(u);
+    });
+  });
+  // CSS background-image from style attrs
+  doc.querySelectorAll('[style*="background"]').forEach(el => {
+    const m = el.style.backgroundImage.match(/url\(['"]?([^'")\s]+)['"]?\)/);
+    if (m) { const u = resolve(m[1]); if (u) galleryUrls.add(u); }
+  });
+
+  setProgress(35);
+
+  // Build image list
+  const logoList = [...logoUrls].slice(0, 8);
+  const coverList = [...new Set(coverCandidates)].slice(0, 4);
+  const galleryList = [...galleryUrls]
+    .filter(u => !logoList.includes(u) && !coverList.includes(u))
+    .slice(0, 60);
+
+  setStatus(`<span class="spinner"></span>Trovate ${logoList.length} loghi, ${coverList.length} cover, ${galleryList.length} galleria. Caricamento in corso…`);
+
+  // Render sections
+  renderSection('logoContainer', logoList, 'logo');
+  renderSection('coverContainer', coverList, 'cover');
+  renderSection('galleryContainer', galleryList, 'gallery');
+
+  document.getElementById('results').style.display = 'block';
+
+  // Now try to load images (filter broken ones)
+  await loadImages(logoList.concat(coverList, galleryList));
+
+  setProgress(100);
+  const tot = logoList.length + coverList.length + galleryList.length;
+  setStatus(`✓ Fatto! ${tot} immagini trovate. Clicca per selezionare, poi scarica il ZIP.`);
+  setTimeout(() => setProgress(null), 800);
+  document.getElementById('fetchBtn').disabled = false;
+  updateDownloadBar();
+}
+
+function renderSection(containerId, urls, category) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  if (!urls.length) {
+    container.innerHTML = '<p class="empty-msg">Nessuna immagine trovata in questa categoria.</p>';
+    return;
+  }
+  for (const url of urls) {
+    const card = document.createElement('div');
+    card.className = category === 'logo' ? 'logo-card img-card' : 'img-card';
+    card.dataset.url = url;
+    card.dataset.category = category;
+
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = '';
+    img.onerror = () => { card.style.display = 'none'; };
+    img.loading = 'lazy';
+
+    const badge = document.createElement('div');
+    badge.className = 'badge';
+    badge.textContent = url.split('/').pop().split('?')[0] || url;
+
+    card.appendChild(img);
+    card.appendChild(badge);
+    card.addEventListener('click', () => toggleSelect(card, url));
+
+    container.appendChild(card);
+
+    allImages.push({ url, category, card });
+  }
+}
+
+async function loadImages(urls) {
+  // Just wait a moment for browsers to start loading
+  await new Promise(r => setTimeout(r, 400));
+}
+
+function toggleSelect(card, url) {
+  if (selectedImages.has(url)) {
+    selectedImages.delete(url);
+    card.classList.remove('selected');
+  } else {
+    selectedImages.add(url);
+    card.classList.add('selected');
+  }
+  updateDownloadBar();
+}
+
+function updateDownloadBar() {
+  const bar = document.getElementById('downloadBar');
+  const num = document.getElementById('selNum');
+  num.textContent = selectedImages.size;
+  if (selectedImages.size > 0) bar.classList.add('show');
+  else bar.classList.remove('show');
+}
+
+function toggleSelectAll() {
+  allSelected = !allSelected;
+  const btn = document.getElementById('selectAllBtn');
+  allImages.forEach(({ url, card }) => {
+    if (card.style.display === 'none') return;
+    if (allSelected) {
+      selectedImages.add(url);
+      card.classList.add('selected');
+    } else {
+      selectedImages.delete(url);
+      card.classList.remove('selected');
+    }
+  });
+  btn.textContent = allSelected ? 'Deseleziona tutto' : 'Seleziona tutto';
+  updateDownloadBar();
+}
+
+async function downloadZip() {
+  if (selectedImages.size === 0) return;
+  const btn = document.getElementById('downloadBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Creando ZIP…';
+
+  const zip = new JSZip();
+  const folders = {
+    logo: zip.folder('logo'),
+    cover: zip.folder('cover'),
+    gallery: zip.folder('gallery'),
+  };
+
+  let done = 0;
+  const total = selectedImages.size;
+
+  for (const imgObj of allImages) {
+    if (!selectedImages.has(imgObj.url)) continue;
+    try {
+      const resp = await fetchWithProxy(imgObj.url);
+      const blob = await resp.blob();
+      const ext = (imgObj.url.split('.').pop().split('?')[0] || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'') || 'jpg';
+      const name = `${imgObj.category}_${done + 1}.${ext}`;
+      folders[imgObj.category].file(name, blob);
+    } catch(e) {
+      console.warn('Skip:', imgObj.url, e.message);
+    }
+    done++;
+    setStatus(`<span class="spinner"></span>Scaricando ${done}/${total}…`);
+    setProgress(Math.round((done / total) * 100));
+  }
+
+  const content = await zip.generateAsync({ type: 'blob' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(content);
+  a.download = 'immagini_sito.zip';
+  a.click();
+
+  setProgress(null);
+  setStatus('✓ ZIP scaricato con successo!');
+  btn.disabled = false;
+  btn.textContent = '⬇ Scarica ZIP';
+}
+</script>
+</body>
+</html>
