@@ -375,9 +375,9 @@ function mapRow(row) {
   const fundingOther = g('Other'); // col 75
 
   return {
-    'name':                   g('Chi siete? Che missione avete?').slice(0, 255),
-    'legal_name':             g('Nome legale'),
-    'description':            g('Obiettivo legale (oggetto sociale)'),
+    'name':                   g('Nome legale'),
+    'legal_name':             g('Obiettivo legale (oggetto sociale)'),
+    'description':            g('Chi siete? Che missione avete?'),
     'tax_id':                 g('Codice fiscale/PIVA'),
     'legal_form':             g('Tipo organizzazione'),
     'hq_address':             [g('Address'), g('Address line 2')].filter(Boolean).join(', '),
@@ -389,11 +389,8 @@ function mapRow(row) {
     'operational_locations':  g('Sedi effettive'),
     'mission_short':          g("Quale è lo scopo dell'organizzazione, in breve? (max 200char)"),
     'mission_long_md':        g("Quale è lo scopo dell'organizzazione, in esteso? (max 2000char)"),
-    'impact_metrics':         [
-                                g('Come pensi che la vostra organizzazione impatti positivamente sul mondo, gli altri o la realtà che vi circonda?'),
-                                g('Se disponibili, inserire delle metriche utilizzate per valutare l\'impatto positivo della vostra organizzazione')
-                              ].filter(Boolean).join('\n\n---\n\n'),
-    'impact_areas':           impactAreas.join(', '),
+    'impact_areas':           g('Come pensi che la vostra organizzazione impatti positivamente sul mondo, gli altri o la realtà che vi circonda?'),
+    'impact_metrics':         [g('Se disponibili, inserire delle metriche utilizzate per valutare l\'impatto positivo della vostra organizzazione'), g('Avete riconoscimenti/certificazioni?')].filter(Boolean).join('\n\n---\n\n'),
     'collaborations':         collabs.join('\n'),
     'other_organizations_reports': g('Descrivere brevemente collaborazioni più significative'),
     'work_environment':       envVals.join(', '),
@@ -406,72 +403,14 @@ function mapRow(row) {
 
 // ─── Generate the console script ───────────────────────────────────────────────
 function generateScript(mapping) {
-  const data = JSON.stringify(mapping, null, 2);
-  return `
-// ── Fuocus Autofill ──────────────────────────────────────────────
-// Incolla questo script nella console su app.fuocus.org/admin/organizations/create
-(function() {
-  const data = ${data};
-
-  function setLivewire(el, value) {
-    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value') ||
-                                    Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value');
-    if (nativeInputValueSetter) {
-      nativeInputValueSetter.set.call(el, value);
-    } else {
-      el.value = value;
-    }
-    el.dispatchEvent(new Event('input', { bubbles: true }));
-    el.dispatchEvent(new Event('change', { bubbles: true }));
-    el.dispatchEvent(new Event('blur', { bubbles: true }));
-  }
-
-  function fillField(wireModel, value) {
-    if (!value) return;
-    const sel = \`[wire\\\\:model="${wireModel}"], [wire\\\\:model\\\\.blur="${wireModel}"], [wire\\\\:model\\\\.live="${wireModel}"]\`;
-    const el = document.querySelector(sel);
-    if (el) {
-      setLivewire(el, value);
-      console.log('✅', wireModel, '=', value.slice ? value.slice(0,60) : value);
-    } else {
-      console.warn('⚠️  Campo non trovato:', wireModel);
-    }
-  }
-
-  const fieldMap = {
-    'data.name': data.name,
-    'data.legal_name': data.legal_name,
-    'data.description': data.description,
-    'data.tax_id': data.tax_id,
-    'data.foundation_year': data.foundation_year,
-    'data.website': data.website,
-    'data.hq_address': data.hq_address,
-    'data.hq_location': data.hq_location,
-    'data.employees_count': data.employees_count,
-    'data.operational_locations': data.operational_locations,
-    'data.mission_short': data.mission_short,
-    'data.mission_long_md': data.mission_long_md,
-    'data.impact_metrics': data.impact_metrics,
-    'data.work_flexibility': data.work_flexibility,
-    'data.performance_evaluation': data.performance_evaluation,
-    'data.volunteer_requirements': data.volunteer_requirements,
-    'data.other_organizations_reports': data.other_organizations_reports,
-    'data.funding_sources': data.funding_sources,
-  };
-
-  for (const [field, value] of Object.entries(fieldMap)) {
-    fillField(field, value);
-  }
-
-  // Campi speciali (select, multi-select) — da compilare manualmente se necessario
-  console.log('\\n⚠️  Campi da completare manualmente (select/multi):');
-  console.log('  legal_form:', data.legal_form);
-  console.log('  country_code:', data.country_code);
-  console.log('  impact_areas:', data.impact_areas);
-  console.log('  collaborations:', data.collaborations);
-  console.log('  work_environment:', data.work_environment);
-  console.log('\\n✅ Autofill completato! Controlla i campi e salva.');
-})();`.trim();
+  var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(mapping))));
+  var p1 = '(function(){var data=JSON.parse(decodeURIComponent(escape(atob("';
+  var p2 = '"))));';
+  var p3 = 'function sv(el,v){var di=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,"value");var dt=Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype,"value");try{if(el.tagName==="TEXTAREA"&&dt){dt.set.call(el,v);}else if(di){di.set.call(el,v);}else{el.value=v;}}catch(e){el.value=v;}["input","change","blur"].forEach(function(t){el.dispatchEvent(new Event(t,{bubbles:true}));});}';
+  var p4 = 'function fi(m,v){if(!v)return;var sel="[wire\\\\:model=\\""+m+"\\"]";var el=document.querySelector(sel)||document.querySelector("[wire\\\\:model\\\\.blur=\\""+m+"\\"]")||document.querySelector("[wire\\\\:model\\\\.live=\\""+m+"\\"]");if(el){sv(el,v);console.log("OK",m);}else{console.warn("NOT FOUND",m);}}';
+  var p5 = '["data.name","data.legal_name","data.description","data.tax_id","data.foundation_year","data.website","data.hq_address","data.hq_location","data.employees_count","data.operational_locations","data.mission_short","data.mission_long_md","data.impact_metrics","data.work_flexibility","data.performance_evaluation","data.volunteer_requirements","data.other_organizations_reports","data.funding_sources"].forEach(function(k){fi(k,data[k.replace("data.","")]);});';
+  var p6 = 'console.log("MANUALI> legal_form="+data.legal_form+" country="+data.country_code+" impact="+data.impact_areas+" env="+data.work_environment);})();';
+  return p1 + b64 + p2 + p3 + p4 + p5 + p6;
 }
 
 // ─── UI ────────────────────────────────────────────────────────────────────────
